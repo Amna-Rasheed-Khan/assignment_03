@@ -39,15 +39,18 @@ pipeline {
             steps {
                 echo 'Running Containerized Selenium Tests...'
                 // Run the Selenium tests container against the deployed application
-                // Passing the network and environment variables to connect to selenium-hub and webapp
+                // Network name = <compose_project_name>_<network_name>
                 sh '''
-                docker run --rm --network assignment-3_app-network \
-                -e APP_URL=http://webapp:3000 \
+                NETWORK=$(docker network ls --format "{{.Name}}" | grep app-network | head -1)
+                echo "Using network: $NETWORK"
+                docker run --rm --network $NETWORK \
+                -e APP_URL=http://taskmanager-webapp:3000 \
                 -e SELENIUM_HUB_URL=http://selenium-hub:4444/wd/hub \
                 ${TEST_IMAGE}
                 '''
             }
         }
+
     }
 
     post {

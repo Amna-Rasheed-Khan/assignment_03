@@ -5,8 +5,17 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "test": "jest",
+    "test": "jest --forceExit --testEnvironment=node",
     "test:selenium": "node test/selenium.test.js"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/test/selenium.test.js"
+    ],
+    "forceExit": true,
+    "testTimeout": 30000
   },
   "dependencies": {
     "express": "^4.18.2",
