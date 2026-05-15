@@ -7,7 +7,7 @@ services:
     ports:
       - "80:3000"
     environment:
-      - MONGO_URI=mongodb+srv://ranaaali480_db_user:qy.7LB%JSWxLFq5@cluster0.xmzv1jd.mongodb.net/taskmanager?appName=Cluster0
+      - MONGO_URI=mongodb+srv://ranaaali480_db_user:qy.7LB%25JSWxLFq5@cluster0.xmzv1jd.mongodb.net/taskmanager?appName=Cluster0
 
 networks:
   app-network:
