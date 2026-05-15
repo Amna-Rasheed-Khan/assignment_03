@@ -5,7 +5,7 @@ services:
     build: .
     container_name: taskmanager-webapp
     ports:
-      - "3000:3000"
+      - "80:3000"
     environment:
       - MONGO_URI=mongodb+srv://ranaaali480_db_user:qy.7LB%JSWxLFq5@cluster0.xmzv1jd.mongodb.net/taskmanager?appName=Cluster0
 
