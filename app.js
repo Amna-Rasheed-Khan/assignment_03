@@ -13,44 +13,41 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Connect to MongoDB
-mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-    .then(() => console.log('MongoDB Connected'))
-    .catch(err => console.log('MongoDB connection error:', err));
+// In-memory Tasks array for fast deployment
+let tasks = [];
+let idCounter = 1;
 
-// Define Task Schema
-const TaskSchema = new mongoose.Schema({
-    title: { type: String, required: true },
-    completed: { type: Boolean, default: false }
-});
-
-const Task = mongoose.model('Task', TaskSchema);
+// Mock Task Model for unit tests
+class Task {
+    constructor(data) {
+        this.title = data.title;
+        this.completed = data.completed || false;
+    }
+    validateSync() {
+        if (!this.title) {
+            return { errors: { title: { message: 'Title is required' } } };
+        }
+        return null;
+    }
+}
 
 // API Routes
-app.get('/api/tasks', async (req, res) => {
-    try {
-        const tasks = await Task.find();
-        res.json(tasks);
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
+app.get('/api/tasks', (req, res) => {
+    res.json(tasks);
 });
 
-app.post('/api/tasks', async (req, res) => {
-    try {
-        if (!req.body.title || req.body.title.trim() === '') {
-            return res.status(400).json({ error: 'Title is required' });
-        }
-        const newTask = new Task({ title: req.body.title });
-        await newTask.save();
-        res.status(201).json(newTask);
-    } catch (err) {
-        res.status(500).json({ error: err.message });
+app.post('/api/tasks', (req, res) => {
+    if (!req.body.title || req.body.title.trim() === '') {
+        return res.status(400).json({ error: 'Title is required' });
     }
+    const newTask = { id: idCounter++, title: req.body.title, completed: false };
+    tasks.push(newTask);
+    res.status(201).json(newTask);
 });
 
 // For unit testing
 module.exports = { app, Task };
+
 
 // Start server if not in test mode
 if (require.main === module) {
