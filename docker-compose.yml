@@ -1,14 +1,29 @@
 version: '3.8'
 
 services:
+  mongodb:
+    image: mongo:6.0
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - app-network
+
   webapp:
     build: .
     container_name: taskmanager-webapp
     ports:
       - "80:3000"
     environment:
-      - MONGO_URI=mongodb+srv://ranaaali480_db_user:qy.7LB%25JSWxLFq5@cluster0.xmzv1jd.mongodb.net/taskmanager?appName=Cluster0
+      - MONGO_URI=mongodb://mongodb:27017/taskmanager
+    depends_on:
+      - mongodb
+    networks:
+      - app-network
 
-networks:
+volumes:
+  mongo-data:
   app-network:
     driver: bridge
