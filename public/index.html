@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Manager - Assignment 3</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background-color: #f4f4f9; }
+        .container { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        h1 { text-align: center; color: #333; }
+        input[type="text"] { width: 70%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; }
+        button { padding: 10px 15px; border: none; background: #28a745; color: white; border-radius: 4px; cursor: pointer; }
+        button:hover { background: #218838; }
+        ul { list-style-type: none; padding: 0; }
+        li { background: #eee; margin: 10px 0; padding: 10px; border-radius: 4px; display: flex; justify-content: space-between; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Task Manager</h1>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+            <input type="text" id="taskInput" placeholder="Enter new task...">
+            <button id="addTaskBtn" onclick="addTask()">Add Task</button>
+        </div>
+        <ul id="taskList"></ul>
+    </div>
+
+    <script>
+        async function fetchTasks() {
+            const res = await fetch('/api/tasks');
+            const tasks = await res.json();
+            const list = document.getElementById('taskList');
+            list.innerHTML = '';
+            tasks.forEach(task => {
+                const li = document.createElement('li');
+                li.textContent = task.title;
+                list.appendChild(li);
+            });
+        }
+
+        async function addTask() {
+            const input = document.getElementById('taskInput');
+            const title = input.value;
+            if (!title) return alert('Task title cannot be empty!');
+            
+            const res = await fetch('/api/tasks', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ title })
+            });
+            
+            if (res.ok) {
+                input.value = '';
+                fetchTasks();
+            }
+        }
+
+        fetchTasks();
+    </script>
+</body>
+</html>

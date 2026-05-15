@@ -1,0 +1,12 @@
+FROM node:18-alpine
+
+# Install testing dependencies
+WORKDIR /usr/src/app
+COPY package*.json ./
+RUN npm install
+
+# Copy test files and app files
+COPY . .
+
+# Run jest specifically for the selenium tests
+CMD ["npm", "run", "test:selenium"]

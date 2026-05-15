@@ -1,0 +1,22 @@
+{
+  "name": "assignment-3-web-app",
+  "version": "1.0.0",
+  "description": "Simple Task Manager for CI/CD Assignment",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "jest",
+    "test:selenium": "node test/selenium.test.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "mongoose": "^7.0.3",
+    "cors": "^2.8.5",
+    "body-parser": "^1.20.2"
+  },
+  "devDependencies": {
+    "jest": "^29.5.0",
+    "selenium-webdriver": "^4.8.2",
+    "supertest": "^6.3.3"
+  }
+}
